@@ -1,5 +1,5 @@
 # PicoSDK4Nim
-This is a library to write [Nim](https://nim-lang.org) code for Raspberry Pi Pico and wraps [Raspberry Pi Pico SDK](https://github.com/raspberrypi/pico-sdk).
+This is a library to write [Nim](https://nim-lang.org) code for Raspberry Pi Pico series and wraps [Raspberry Pi Pico SDK](https://github.com/raspberrypi/pico-sdk).
 
 
 ## There is already Raspberry Pi Pico SDK for Nim. Why created another tool?
@@ -23,10 +23,17 @@ git clone https://github.com/raspberrypi/pico-sdk.git --branch master --depth 1 
           - Install binutils, gcc, new and gdb targets arm-none-eabi
     - Build or install [OpenOCD](https://github.com/raspberrypi/openocd) if you want to use Picoprobe or Raspberry Pi Debug Probe
         - Read Appendix A: Debugprobe in [Getting Started with the Raspberry Pi Pico-Series](https://rptl.io/pico-get-started)
+    - Install [picotool](https://github.com/raspberrypi/picotool) if you use it.
+      Pico SDK use it to create UF2 file, hash and sign binaries.
+      If picotool is not installed, Pico SDK automatically download the source and build it.
+      But it takes long time, and it is cached only for one project and it is built again when you compile other projects.
+      If you installed picotool to a custom path, define `PicotoolDir` with the path to the directory containing picotool by adding `-d:PicotoolDir=/path/to/picotool` to nim command line options or `switch("define", "PicotoolDir=/path/to/picotool")` to `config.nims`.
+      If you don't use picotool, define `PicoNoPicotool` so that Pico SDK don't build picotool.
 
 
 ## How to install
 Before installing picosdk4nim, make sure that build tools, CMake and Raspberry Pi Pico SDK are installed, and you can build example C code with `CMakeLists.txt` in https://github.com/raspberrypi/pico-sdk/blob/master/README.md
+
 
 Install using nimble:
 ```console
@@ -83,6 +90,23 @@ Then you can compile `blink.nim` with following command:
 $ nim c -d:PicoSDKPath=/path/to/pico-sdk/ blink.nim
 ```
 You can put `-d:PicoSDKPath=/path/to/pico-sdk/` option as `switch("define", "/path/to/pico-sdk")` to `config.nims` in any directories Nim searches for `.nims` configuration files.
+
+In default, output binary is compiled for Raspberry Pi Pico board.
+If you want to run it on other boards with RP series micro controllers, set the board name to `PicoBoard` build option.
+For example:
+```console
+# Build for Raspberry Pi Pico W
+$ nim c -d:PicoBoard=pico_w blink.nim
+
+# Build for Raspberry Pi Pico 2
+$ nim c -d:PicoBoard=pico2 blink.nim
+```
+[This is a list of board names](https://github.com/raspberrypi/pico-sdk/tree/master/src/boards/include/boards)
+If you find the board name in the list, remove '.h' suffix and set it to `PicoBoard`.
+
+When you add or change PicoBoard or PicoPlatform build option, please clear the Nim cache directory before building.
+`-f` option doesn't works in this case because it doesn't delete CMake build directory in Nim cache directory.
+If you didn't delete the Nim cache directory, you will get CMake error or C code are compiled with wrong compile options.
 
 
 ## How to load and run a program on Raspberry Pi Pico
