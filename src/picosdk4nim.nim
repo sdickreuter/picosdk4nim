@@ -90,6 +90,15 @@ const cmakeStmts = block:
     # Raspberry Pi Pico SDK disabled C++ exception handling in default to save space
     res.add initCMakeCmd("set(PICO_CXX_ENABLE_EXCEPTIONS 1)")
 
+  when defined(Pico200MHz):
+    #res.add initCMakeCmd("target_compile_definitions(SYS_CLK_MHZ=200)")
+    #res.add initCMakeCmd("set(SYS_CLK_MHZ 200)")
+    #res.add initCMakeCmd("add_compile_definitions(SYS_CLK_MHZ=200)")
+    res.add initCMakeCmdWithTarget("target_compile_definitions(#target PRIVATE SYS_CLK_MHZ=200)")
+    #res.add initCMakeCmd("set(SYS_CLK_MHZ 200)")
+    #res.add initCMakeCmd("add_compile_definitions(SYS_CLK_MHZ=200)")
+
+
   when defined(PicoEnableStdioUsb):
     res.add initCMakeCmdWithTarget(fmt"pico_enable_stdio_usb(#target {ord(PicoEnableStdioUsb)})")
   when defined(PicoEnableStdioUart):
@@ -101,6 +110,7 @@ const cmakeStmts = block:
     res.add initCMakeCmdWithTarget(fmt"target_compile_definitions(#target PRIVATE PICO_DEFAULT_UART_TX_PIN={PicoDefaultUartTxPin})")
   when defined(PicoDefaultUartRxPin):
     res.add initCMakeCmdWithTarget(fmt"target_compile_definitions(#target PRIVATE PICO_DEFAULT_UART_RX_PIN={PicoDefaultUartRxPin})")
+
 
   when PicoNoPicotool:
     res.add initCMakeCmd("set(PICO_NO_PICOTOOL 1)")

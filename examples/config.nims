@@ -1,4 +1,4 @@
-switch("path", "$projectDir/../src")
+switch("define", "PicoSDKPath=/usr/share/pico-sdk/")
 switch("define", "release")
 switch("mm", "arc") # use "arc", "orc" or "none"
 switch("define", "checkAbi")
@@ -23,5 +23,8 @@ switch("gcc.exe", "void")
 switch("gcc.cpp.exe", "void")
 nimcacheDir().mkDir()
 
-switch("define", "PicoAddExtraOutput")
-# switch("define", "PicoBinaryType=no_flash")
+# If you want .uf2 file
+#switch("define", "PicoAddExtraOutput")
+switch("define","PicoEnableStdioUsb")
+switch("define","Pico200MHz")
+
