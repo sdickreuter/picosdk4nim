@@ -10,5 +10,6 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.2.0"
-requires "https://github.com/demotomohiro/pathX"
 requires "https://github.com/demotomohiro/hidecmakelinker >= 0.1.1"
+requires "pathX"
+

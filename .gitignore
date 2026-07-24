@@ -3,3 +3,16 @@ nimblecache/
 htmldocs/
 nimble.develop
 nimble.paths
+nimbledeps
+
+/deps
+/build/
+*.elf
+.rp2350
+.rp2040
+
+*.hex
+*.uf2
+*.dis
+*.bin
+*elf.map
